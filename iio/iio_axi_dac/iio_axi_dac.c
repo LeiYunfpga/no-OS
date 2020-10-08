@@ -708,40 +708,31 @@ static ssize_t iio_axi_dac_delete_device_descriptor(
 static int32_t iio_axi_dac_create_device_descriptor(
 	struct axi_dac *adc, struct iio_device *iio_device)
 {
+	static struct scan_type scan_type = {
+		.sign = 's',
+		.realbits = 16,
+		.storagebits = 16,
+		.shift = 0,
+		.is_big_endian = false
+	};
+
 	static struct iio_channel default_voltage_channel = {
 		.ch_type = IIO_VOLTAGE,
-		.scan_type =  (struct scan_type)
-		{
-			.sign = 's',
-			.realbits = 16,
-			.storagebits = 16,
-			.shift = 0,
-			.is_big_endian = false,
-		},
+		.scan_type = &scan_type,
 		.attributes = iio_voltage_attributes,
 		.ch_out = true,
-		.offset = 0,
 	};
 
 	static struct iio_channel default_altvoltage_channel = {
 		.ch_type = IIO_ALTVOLTAGE,
-		.scan_type =  (struct scan_type)
-		{
-			.sign = 's',
-			.realbits = 16,
-			.storagebits = 16,
-			.shift = 0,
-			.is_big_endian = false,
-		},
+		.scan_type = &scan_type,
 		.attributes = iio_altvoltage_attributes,
 		.ch_out = true,
-		.offset = 0,
 	};
 
 	int32_t i, voltage_ch_no, altvoltage_ch_no;
 	int32_t ret;
 
-	default_altvoltage_channel.offset = adc->num_channels;
 	voltage_ch_no = adc->num_channels;
 	altvoltage_ch_no = adc->num_channels * 2;
 	iio_device->num_ch = voltage_ch_no + altvoltage_ch_no;

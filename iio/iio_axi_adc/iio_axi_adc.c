@@ -478,18 +478,19 @@ static ssize_t iio_axi_adc_delete_device_descriptor(
 static int32_t iio_axi_adc_create_device_descriptor(
 		struct axi_adc *adc, struct iio_device *iio_device)
 {
+	static struct scan_type scan_type = {
+		.sign = 's',
+		.realbits = 16,
+		.storagebits = 16,
+		.shift = 0,
+		.is_big_endian = false
+	};
+
 	static struct iio_channel default_channel = {
 		.ch_type = IIO_VOLTAGE,
-		.scan_type =  (struct scan_type) {
-			.sign = 's',
-			.realbits = 16,
-			.storagebits = 16,
-			.shift = 0,
-			.is_big_endian = false
-		},
+		.scan_type =  &scan_type,
 		.attributes = iio_voltage_attributes,
 		.ch_out = false,
-		.offset = 0,
 	};
 	int32_t i;
 	int32_t ret;
